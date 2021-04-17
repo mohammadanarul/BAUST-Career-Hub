@@ -11,3 +11,6 @@ def signin(request):
 
 def signup(request):
     return render(request, 'Admin_app/SignUp.html')
+
+def base(request):
+    return render(request, 'Admin_app/base_template.html')
