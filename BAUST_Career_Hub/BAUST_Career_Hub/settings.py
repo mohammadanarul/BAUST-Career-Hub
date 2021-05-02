@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -28,6 +28,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+IMAGE_URL = "/Image/"
+IMAGE_ROOT = os.path.join(BASE_DIR,"Image")
 
 # Application definition
 
@@ -78,11 +80,11 @@ WSGI_APPLICATION = 'BAUST_Career_Hub.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'BAUST Career-Hub',
+        'NAME': 'BAUST_Career_Hub',
+        'USER': 'BAUST_Career_Hub',
+        'PASSWORD': 'BAUST_Career_Hub',
         'HOST': '127.0.0.1',
-        'PORT': '3306',
-        'USER': 'root',
-        'PASSWORD': '',
+        'PORT': '3306'
     }
 }
 
@@ -127,3 +129,5 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / "Static"
 ]
+
+print(IMAGE_ROOT)
