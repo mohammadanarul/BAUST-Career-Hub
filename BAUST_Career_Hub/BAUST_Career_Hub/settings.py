@@ -27,6 +27,7 @@ SECRET_KEY = '7*mvzv!)!-3kmg%(ehw5i*lq%*(2j5#d4*(xp(k77&b(v15)!f'
 DEBUG = True
 
 ALLOWED_HOSTS = []
+AUTH_USER_MODEL = 'Admin_app.User'
 
 IMAGE_URL = "/Image/"
 IMAGE_ROOT = os.path.join(BASE_DIR,"Image")
@@ -51,6 +52,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
 ]
 
 ROOT_URLCONF = 'BAUST_Career_Hub.urls'
@@ -80,9 +82,9 @@ WSGI_APPLICATION = 'BAUST_Career_Hub.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'BAUST_Career_Hub',
-        'USER': 'BAUST_Career_Hub',
-        'PASSWORD': 'BAUST_Career_Hub',
+        'NAME': 'Baust',
+        'USER': 'root',
+        'PASSWORD': '',
         'HOST': '127.0.0.1',
         'PORT': '3306'
     }

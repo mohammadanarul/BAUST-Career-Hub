@@ -16,10 +16,21 @@
               <!-- /.card-header -->
               <!-- form start -->
 
-                {% url 'doSignUp' as action_path %}
+                {% url 'student_signup' as action_path %}
 
-                {% include 'Admin_app/form_template.html' with messages=messages form=form action_path=action_path button_text="Admin Signup" button_text="Admin Signup" %}
+                {% include 'Admin_app/form_template.html' with messages=messages form=form action_path=action_path button_text="Admin Signup" button_text="Student Signup" %}
             </div>
+
+            <div class="card-header">
+              
+            </div>
+            <!-- /.card-header -->
+            <!-- form start -->
+
+              {% url 'teacher_signup' as action_path %}
+
+              {% include 'Admin_app/form_template.html' with messages=messages form=form action_path=action_path button_text="Admin Signup" button_text="Teacher Signup" %}
+          </div>
             <!-- /.card -->
 
 
@@ -27,6 +38,12 @@
           </div>
           </div>
       </div><!-- /.container-fluid -->
+      <span>Already on BAUST Career-Hub? 
+        <a href="{% url 'signin' %}" class="btn-get-started scrollto d-inline-flex align-items-center justify-content-center align-self-center">
+        <span>Sign In </span>
+      </a>
+    </span>
     </section>
     <!-- /.content -->
 {% endblock main_content %}
+{% include 'Admin_app/footer.html' %}

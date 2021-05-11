@@ -6,14 +6,22 @@
   <div class="container">
     <div class="row">
       <div class="col-lg-6 d-flex flex-column justify-content-center">
-        <h1 data-aos="fade-up">Join your colleagues, classmates, and friends on BAUST Carrier-Hub</h1>
-        <h2 data-aos="fade-up" data-aos-delay="400">Post your job experience and share with people</h2>
+        <h1 data-aos="fade-up">Join your colleagues, classmates, and friends on BAUST Career-Hub</h1>
+        <h2 data-aos="fade-up" data-aos-delay="400" >Post your job experience and share with people</h2><br><br>
         <div data-aos="fade-up" data-aos-delay="600">
           <div class="text-center text-lg-start">
-            <a href="{% url 'signin' %}" class="btn-get-started scrollto d-inline-flex align-items-center justify-content-center align-self-center">
-              <span>Sign In Here</span>
-              <i class="bi bi-arrow-right"></i>
-            </a>
+            
+            <nav id="navbar" class="navbar">
+              <ul>
+                <li><a class="getstarted scrollto" href="{% url 'signup' %}">Sign Up</a></li>
+                <li><a class="getstarted scrollto"  href="{% url 'signin' %}">Sign In</a></li>
+                
+              </ul>
+              
+            </nav>
+
+
+            
           </div>
         </div>
       </div>

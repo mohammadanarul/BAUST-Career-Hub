@@ -54,7 +54,7 @@
           </div>
         </div>
         <div class="row">
-
+          <a href=""<span>Forgot password?  </a></span>
           <!-- /.col -->
           <div class="col-12">
             <button type="submit" class="btn btn-primary btn-block">Sign In</button>
@@ -75,7 +75,10 @@
         </div>
 
       </form>
-
+      <span>New to BAUST Career-Hub? <a href="{% url 'signup' %}" class="btn-get-started scrollto d-inline-flex align-items-center justify-content-center align-self-center">
+        <span>Signup </span>
+        
+      </a></span>
 
       <!-- /.social-auth-links -->
 
@@ -85,7 +88,7 @@
   </div>
 </div>
 <!-- /.login-box -->
-
+{% include 'Admin_app/footer.html' %}
 
 <!-- jQuery -->
 <script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
@@ -100,3 +103,5 @@
 </body>
 
 </html>
+
+
