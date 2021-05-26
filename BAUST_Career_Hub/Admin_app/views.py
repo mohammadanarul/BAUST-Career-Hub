@@ -1,4 +1,5 @@
-from .models import User
+
+from .models import Student, Teacher
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import messages
@@ -8,7 +9,7 @@ from django.contrib.auth import login, authenticate
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import render, redirect, get_object_or_404
 
-
+from django.template import RequestContext
 def index(request):
     return render(request, 'Admin_app/index.html')
 
@@ -42,11 +43,8 @@ def teacher_signup(request):
 
 
 def student_signup_save(request):
-    if request.method != "POST":
-        return HttpResponse("Method not allowed")
-    else:
-        form = StudentSignUpForm(request.POST, request.FILES)
-
+    if request.method == 'POST':
+        form = StudentSignUpForm(request.POST)
         if form.is_valid():
             email = form.cleaned_data['email']
             name = form.cleaned_data['name']
@@ -56,42 +54,41 @@ def student_signup_save(request):
             phone = form.cleaned_data['phone']
             password = form.cleaned_data['password']
             confirm_password = form.cleaned_data['confirm_password']
-            gender = form.cleaned_data['gender']
-            address = form.cleaned_data['address']
-    
-            picture = request.FILES['picture']
-            fs = FileSystemStorage()
-            filename = fs.save(picture.name, picture)
-            profile_pic_url = fs.url(filename)
+            #gender = form.cleaned_data['gender']
+            #dob = form.cleaned_data['dob']
+            #address = form.cleaned_data['address']
+            #picture = form.cleaned_data['picture']
 
             try:
-                user = User.objects.create_user(password=password,confirm_password=confirm_password, email=email,name=name,  user_type=1)
-                user.student.department = department
-                user.student.student_id = student_id
-                user.student.level_term = level_term
-                user.student.phone = phone
-                user.student.department = department
-                user.student.gender = gender
-                user.student.address = address               
-                user.student.picture = profile_pic_url
+                user = Student()
                 
+                user.email = email
+                user.name = name
+                user.department = department
+                user.student_id = student_id
+                user.level_term = level_term
+                user.phone = phone
+                user.password = password
+                user.confirm_password = confirm_password
+                #user.gender - gender
+                #user.dob = dob
+                #user.address = address
+                #user.picture = picture
+
+
                 user.save()
-                
-                messages.success(request, "Registration successfully")                
+                messages.success(request, "Registration successfully")              
                 return HttpResponseRedirect(reverse("signin"))
                
 
             except:
-                
-                messages.error(request, "Registration Failed!!")                
+                messages.error(request, "Registration Failed!!")              
                 return HttpResponseRedirect(reverse("student_signup"))
                 
 
-        else:
-            form = StudentSignUpForm(request.POST)
-            return render(request, 'Admin_app/StudentSignUp.html', {"form": form})
-
-
+    else:
+        form = StudentSignUpForm()
+    return render(request, 'Admin_app/StudentSignUp.html', {'form': form})
 
 
 
@@ -119,7 +116,7 @@ def teacher_signup_save(request):
             profile_pic_url = fs.url(filename)
 
             try:
-                user = User.objects.create_user(password=password,confirm_password=confirm_password, email=email,name=name,  user_type=2)
+                user = Teacher.objects.create_user(password=password,confirm_password=confirm_password, email=email,name=name,  user_type=2)
                 user.student.department = department
                 user.student.phone = phone
                 user.student.designation = designation
@@ -145,4 +142,5 @@ def teacher_signup_save(request):
         else:
             form = StudentSignUpForm(request.POST)
             return render(request, 'Admin_app/TeacherSignUp.html', {"form": form})
+
 

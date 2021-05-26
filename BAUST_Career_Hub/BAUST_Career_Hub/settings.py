@@ -27,7 +27,7 @@ SECRET_KEY = '7*mvzv!)!-3kmg%(ehw5i*lq%*(2j5#d4*(xp(k77&b(v15)!f'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-AUTH_USER_MODEL = 'Admin_app.User'
+#AUTH_USER_MODEL = 'Admin_app.User'
 
 IMAGE_URL = "/Image/"
 IMAGE_ROOT = os.path.join(BASE_DIR,"Image")
@@ -82,7 +82,7 @@ WSGI_APPLICATION = 'BAUST_Career_Hub.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'Baust',
+        'NAME': 'baust',
         'USER': 'root',
         'PASSWORD': '',
         'HOST': '127.0.0.1',
