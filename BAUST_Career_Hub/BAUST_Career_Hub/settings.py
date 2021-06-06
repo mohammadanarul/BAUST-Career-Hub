@@ -27,7 +27,7 @@ SECRET_KEY = '7*mvzv!)!-3kmg%(ehw5i*lq%*(2j5#d4*(xp(k77&b(v15)!f'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-#AUTH_USER_MODEL = 'Admin_app.User'
+
 
 IMAGE_URL = "/Image/"
 IMAGE_ROOT = os.path.join(BASE_DIR,"Image")
@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'Admin_app',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [
@@ -52,7 +53,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    
 ]
 
 ROOT_URLCONF = 'BAUST_Career_Hub.urls'
@@ -81,14 +81,18 @@ WSGI_APPLICATION = 'BAUST_Career_Hub.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'baust',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': '127.0.0.1',
-        'PORT': '3306'
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+        # 'ENGINE': 'django.db.backends.mysql',
+        # 'NAME': 'baust',
+        # 'USER': 'root',
+        # 'PASSWORD': '',
+        # 'HOST': '127.0.0.1',
+        # 'PORT': '3306'
     }
 }
+
+AUTH_USER_MODEL = 'Admin_app.CustomUser'
 
 
 # Password validation
@@ -115,7 +119,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Dhaka'
 
 USE_I18N = True
 
@@ -133,3 +137,5 @@ STATICFILES_DIRS = [
 ]
 
 print(IMAGE_ROOT)
+
+#AUTHENTICATION_BACKENDS = ['Admin_app.EmailBackend.EmailBackend']

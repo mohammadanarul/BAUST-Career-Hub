@@ -18,7 +18,21 @@
 
                 {% url 'student_signup' as action_path %}
 
-                {% include 'Admin_app/form_template.html' with messages=messages form=form action_path=action_path button_text="Student Signup" button_text="Student Signup" %}
+                {% include 'Admin_app/form_template.html' with messages=messages form=form action_path=action_path  button_text="Student Signup" %}
+
+                
+            </div>
+
+            <div class="card card-primary">
+              <div class="card-header">
+                
+              </div>
+              <!-- /.card-header -->
+              <!-- form start -->
+
+                {% url 'teacher_signup' as action_path %}
+
+                {% include 'Admin_app/form_template.html' with messages=messages form=form action_path=action_path  button_text="Teacher Signup" %}
             </div>
 
             <div class="card-header">
@@ -37,6 +51,7 @@
       </a>
     </span>
     </section>
+    
     <!-- /.content -->
 {% endblock main_content %}
 {% include 'Admin_app/footer.html' %}

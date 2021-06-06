@@ -1,82 +1,86 @@
+
 from django import forms
 from django.contrib.auth.forms import UserCreationForm 
 from django.db import transaction
+from django.forms import fields
 from django.forms.fields import DateField
+from django.forms.models import ModelForm
 from django.forms.widgets import DateInput
+from . models import  CustomUser, Department, Designation, Level_Term, Student, Teacher
 
 
 
-class StudentSignUpForm(forms.Form):
-    
-    email = forms.EmailField(label="Email", max_length=50, widget=forms.EmailInput(attrs={"class": "form-control"}))
+class StudentSignUpForm(UserCreationForm):
+    department_list = []
+    try:
+        department = Department.objects.all()
+        for dept in department:
+            small_dept = (dept.id, dept.department_name)
+            department_list.append(small_dept)
+    except:
+        department_list = []
 
-    name = forms.CharField(label="Name", max_length=50,
-                                 widget=forms.TextInput(attrs={"class": "form-control"}))
+    department = forms.ChoiceField(choices = department_list)
 
-    department = forms.CharField(label="Department", max_length=50,
-                                 widget=forms.TextInput(attrs={"class": "form-control"}))
-
-    student_id = forms.CharField(label="Student Id", max_length=15,
-                                 widget=forms.TextInput(attrs={"class": "form-control"}))
-    level_term = forms.CharField(label="Level Term", max_length=50,
-                                 widget=forms.TextInput(attrs={"class": "form-control"}))
-
-    phone = forms.CharField(label="Phone No", max_length=15,
-                                 widget=forms.TextInput(attrs={"class": "form-control"}))
-    password = forms.CharField(label="Password", max_length=50,
-                               widget=forms.PasswordInput(attrs={"class": "form-control"}))
-
-    confirm_password = forms.CharField(label="Confirm Password", max_length=50,
-                               widget=forms.PasswordInput(attrs={"class": "form-control"}))
-    #gender_choice = (
-        ##("Male", "Male"),
-        #("Female", "Female")
-    #)
-
-    #gender = forms.CharField(label="Gender", max_length=50,
-                               #widget=forms.TextInput(attrs={"class": "form-control"}))
-    
-
-    
-    
-
-    #picture = forms.FileField(label="Profile Picture", widget=forms.FileInput(attrs={"class": "form-control"}))
+    # department_list = []
+    # try:
+    #     department = Department.objects.all()
+    #     for dept in department:
+    #         department_list.append(dept.department_name)
+    # except:
+    #     department_list = []
 
 
+    level_term_list = []
+    try:
+        level_term = Level_Term.objects.all()
+        for lt in level_term:
+            small_lt = (lt.id, lt.level_term_name)
+            level_term_list.append(small_lt)
+    except:
+        level_term_list = []
+   
+    level_term = forms.ChoiceField(choices = level_term_list)
 
+    class Meta:
+        
+        model = CustomUser
+        fields = ['username', 'email', 'first_name', 'last_name', 'password1','password2', 'department', 'student_id', 'level_term', 'phone']
 
+#  fields = ['username', 'email', 'first_name', 'last_name', 'password1', 'password2', 'department', 'student_id', 'level_term', 'phone']
 
-class TeacherSignUpForm(forms.Form):
-    email = forms.EmailField(label="Email", max_length=50, widget=forms.EmailInput(attrs={"class": "form-control"}))
-
-    name = forms.CharField(label="Name", max_length=50,
-                                 widget=forms.TextInput(attrs={"class": "form-control"}))
-
-    department = forms.CharField(label="Department", max_length=50,
-                                 widget=forms.TextInput(attrs={"class": "form-control"}))
-
-    phone = forms.CharField(label="Phone No", max_length=15,
-                                 widget=forms.TextInput(attrs={"class": "form-control"}))
-    
-    designation = forms.CharField(label="Designation", max_length=50,
-                                 widget=forms.TextInput(attrs={"class": "form-control"}))
-
-    password = forms.CharField(label="Password", max_length=50,
-                               widget=forms.PasswordInput(attrs={"class": "form-control"}))
-
-    confirm_password = forms.CharField(label="Confirm Password", max_length=50,
-                               widget=forms.PasswordInput(attrs={"class": "form-control"}))
-    gender_choice = (
-        ("Male", "Male"),
-        ("Female", "Female")
-    )
-
-    gender = forms.ChoiceField(label="Gender", choices=gender_choice,
-                               widget=forms.Select(attrs={"class": "form-control"}))
-
-    address = forms.CharField(label="Address", max_length=50, widget=forms.TextInput(attrs={"class": "form-control"}))
     
 
-    picture = forms.ImageField(label="Profile Picture", widget=forms.FileInput(attrs={"class": "form-control"}))
 
+class TeacherSignUpForm(UserCreationForm):
+    department_list = []
+    try:
+        department = Department.objects.all()
+        for dept in department:
+            small_dept = (dept.id, dept.department_name)
+            department_list.append(small_dept)
+    except:
+        department_list = []
 
+    department = forms.ChoiceField(choices=department_list)
+    
+    designation_list = []
+    try:
+        designation = Designation.objects.all()
+        for des in designation:
+            small_des = (des.id, des.designation_name)
+            designation_list.append(small_des)
+    except:
+        designation_list = []
+
+    designation = forms.ChoiceField(choices = designation_list)
+    
+
+    class Meta:
+        model = CustomUser
+        fields = ['username', 'email', 'first_name', 'last_name', 'password1', 'password2', 'department', 'teacher_id', 'designation', 'phone']
+
+  
+
+#   fields = ['username', 'email', 'first_name', 'last_name', 'password1', 'password2', 'department', 'teacher_id', 'designation', 'phone']
+ 

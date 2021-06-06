@@ -35,10 +35,11 @@
     <div class="card-body login-card-body">
       <p class="login-box-msg">Sign in to BAUST Career-Hub</p>
 
-      <form action="/doLogin" method="post">
+      <form action={% url 'student_signin' %} method="post">
         {% csrf_token %}
+        
         <div class="input-group mb-3">
-          <input type="email" class="form-control"  placeholder="Email" name ="email">
+          <input type="text" class="form-control"  placeholder="Username" name ="username">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-envelope"></span>
@@ -46,7 +47,7 @@
           </div>
         </div>
         <div class="input-group mb-3">
-          <input type="password" class="form-control" placeholder="Password" name="password">
+          <input type="password" class="form-control" placeholder="Password" name="password1">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>
