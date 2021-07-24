@@ -5,16 +5,13 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import messages
 from django.urls import reverse
-from .forms import StudentSignUpForm, TeacherSignUpForm
+from .forms import  StudentSignUpForm, TeacherSignUpForm
 from django.contrib.auth import login, authenticate, logout
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import AuthenticationForm, UsernameField
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
-
-#from . EmailBackend import EmailBackend
-
 
 
 
@@ -37,9 +34,9 @@ def signin(request):
     
 
 
-
 def signup(request):
     return render(request, 'Admin_app/SignUp.html')
+
 
 
 def student_signup(request):
@@ -47,27 +44,37 @@ def student_signup(request):
     return render(request, 'Admin_app/StudentSignUp.html', {"form": form}) 
 
 
+
 def teacher_signup(request):
     form = TeacherSignUpForm()
     return render(request, 'Admin_app/TeacherSignUp.html', {"form": form})
 
 
+
 def student_signup_save(request):
     form = StudentSignUpForm()
-
+    print(form.errors)
     if request.method == 'POST':
-        form = StudentSignUpForm(request.POST)
+        print(form.errors)
+        form = StudentSignUpForm(request.POST, request.FILES)
+        print(form.errors)
         
         if form.is_valid():
+            print(form.errors)
             instance = form.save(commit = False)
+            print(form.errors)
             instance.is_student = True
+            print(form.errors)
             instance.save()
+            print(form.errors)
             
             return redirect('signin')
 
     form = StudentSignUpForm()
+    print(form.errors)
     return render(request, 'Admin_app/StudentSignUp.html', {'form': form})
     
+
 
 def teacher_signup_save(request):
     form = TeacherSignUpForm()
@@ -133,12 +140,14 @@ def user_logout(request):
     return HttpResponseRedirect("/")
 
 
+
 @login_required  
 def student_home(request):
     if request.user.is_student:
-        return render(request, 'Admin_app/StudentHome.html')
+        return render(request, 'Admin_app/Student/StudentHome.html')
     else:
         return HttpResponse('You are not as Student!')
+
 
 
 @login_required
@@ -147,6 +156,7 @@ def admin_home(request):
         return render(request, 'Admin_app/Admin/AdminHome.html')
     else:
         return HttpResponse('You are not as Admin!')
+
 
 
 @login_required
@@ -158,8 +168,11 @@ def teacher_home(request):
         return HttpResponse('You are not as Teacher!')
 
 
+
 def Add_Department(request):
     return render(request, 'Admin_app/Admin/Add_Department.html')
+
+
 
 def Add_Department_Save(request):
     if request.method == "POST":
@@ -177,13 +190,19 @@ def Add_Department_Save(request):
     else:
         return HttpResponse("Method not allowed")
 
+
+
 def Manage_Department(request):
     department = Department.objects.all()
     return render(request, "Admin_app/Admin/Manage_Department.html", {"department": department})
 
+
+
 def Edit_Department(request, department_id):
     deptartment = Department.objects.get(id = department_id)
     return render(request, "Admin_app/Admin/Edit_Department.html", {"deptartment": deptartment, "id": department_id})
+
+
 
 def Edit_Department_Save(request):
     if request.method == "POST":
@@ -205,49 +224,69 @@ def Edit_Department_Save(request):
         return HttpResponse("<h2>Method not allowed</h2>")
 
 
+
 def Add_Student(request):
     form = StudentSignUpForm()
     return render(request, 'Admin_app/Admin/Add_Student.html', {'form': form})
 
+
+
 def Add_Student_Save(request):
     return HttpResponse('Add Student')
+
+
 
 def Manage_Student(request):
     student = Student.objects.all()
     return render(request, "Admin_app/Admin/Manage_Student.html", {"student": student})
 
+
+
 def Edit_Student(request):
     return HttpResponse('Edit Student')
 
+
+
 def Edit_Student_Save(request):
     return HttpResponse('Edit Student Save')
+
 
 
 def Add_Teacher(request):
     form = TeacherSignUpForm()
     return render(request, 'Admin_app/Admin/Add_Teacher.html', {'form': form})
 
+
+
 def Add_Teacher_Save(request):
     return HttpResponse('Add Teacher Save')
+
+
 
 def Manage_Teacher(request):
     teacher = Teacher.objects.all()
     return render(request, "Admin_app/Admin/Manage_Teacher.html", {"teacher": teacher})
 
+
+
 def Edit_Teacher(request):
     return HttpResponse('Edit Teacher')
+
+
 
 def Edit_Teacher_Save(request):
     return HttpResponse('Edit Teacher Save')
 
 
+
 def Add_Designation(request):
     return render(request, 'Admin_app/Admin/Add_Designation.html')
+
+
 
 def Add_Designation_Save(request):
     if request.method == "POST":
         designation = request.POST.get("designation_name")
-
         try:
             designation_model = Designation(designation_name=designation)
             designation_model.save()
@@ -260,12 +299,18 @@ def Add_Designation_Save(request):
     else:
         return HttpResponse("Method not allowed")
 
+
+
 def Manage_Designation(request):
     designation = Designation.objects.all()
     return render(request, "Admin_app/Admin/Manage_Designation.html", {"designation": designation})
 
+
+
 def Edit_Designation(request):
     return HttpResponse('Edit Student')
+
+
 
 def Edit_Designation_Save(request):
     return HttpResponse('Edit Student Save')
@@ -274,6 +319,8 @@ def Edit_Designation_Save(request):
 
 def Add_Level_Term(request):
     return render(request, 'Admin_app/Admin/Add_Level_Term.html')
+
+
 
 def Add_Level_Term_Save(request):
     if request.method == "POST":
@@ -291,12 +338,18 @@ def Add_Level_Term_Save(request):
     else:
         return HttpResponse("Method not allowed")
 
+
+
 def Manage_Level_Term(request):
     level_term = Level_Term.objects.all()
     return render(request, "Admin_app/Admin/Manage_Level_term.html", {"level_term": level_term})
 
+
+
 def Edit_Level_Term(request):
     return HttpResponse('Edit Student')
+
+
 
 def Edit_Level_Term_Save(request):
     return HttpResponse('Edit Student Save')
@@ -344,3 +397,12 @@ def add_teacher_from_admin(request):
     return render(request, 'Admin_app/Admin/Add_Teacher.html', {'form': form})
 
 
+def student_details(request, id):
+    data = Student.objects.get(id = id)
+    context = {'data': data}
+    return render(request, 'Admin_app/Admin/Student_details.html', context)
+
+def teacher_details(request, id):
+    data = Teacher.objects.get(id = id)
+    context = {'data': data}
+    return render(request, 'Admin_app/Admin/Teacher_details.html', context)

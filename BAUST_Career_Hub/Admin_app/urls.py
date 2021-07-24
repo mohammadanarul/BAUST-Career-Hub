@@ -64,4 +64,11 @@ urlpatterns = [
 
     path('add_student_from_admin', views.add_student_from_admin, name="add_student_from_admin"),
     path('add_teacher_from_admin', views.add_teacher_from_admin, name="add_teacher_from_admin"),
+
+    path('student_details/<int:id>/', views.student_details, name="student_details"),
+    path('teacher_details/<int:id>/', views.teacher_details, name="teacher_details"),
+
+
+
+    
 ]

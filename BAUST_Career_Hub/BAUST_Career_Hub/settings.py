@@ -12,10 +12,11 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 import os
 from pathlib import Path
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 TEMPLATES_DIR = Path.joinpath(BASE_DIR,'Templates')
-STATIC_DIR = Path.joinpath(BASE_DIR,'Static')
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -28,9 +29,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
-IMAGE_URL = "/Image/"
-IMAGE_ROOT = os.path.join(BASE_DIR,"Image")
 
 # Application definition
 
@@ -131,11 +129,17 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
+
+
 STATIC_URL = '/static/'
+STATIC_ROOT = '/static/'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = '/media/'
 STATICFILES_DIRS = [
-    BASE_DIR / "Static"
+    BASE_DIR / "static",
+    '/var/www/static/', #Use this for live hosting
 ]
 
-print(IMAGE_ROOT)
 
-#AUTHENTICATION_BACKENDS = ['Admin_app.EmailBackend.EmailBackend']
+

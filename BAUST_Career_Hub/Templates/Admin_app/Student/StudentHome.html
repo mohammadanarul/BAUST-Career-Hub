@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ITScorer</title>
+    <link href="{% static 'student/css/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
+    <link href="{% static 'student/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'student/css/style.css' %}" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="{% static 'student/js/ajax.js' %}"></script>
+    <script type="text/javascript" src="{% static 'student/js/main.js' %}"></script>
+    {% block main_head %}
+    {% endblock main_head %}
+</head>
+<body>
+    
+    <main class="container mt-1 pb-2">
+         {% if messages %}
+             {% for mess in messages %}
+                <div class="alert alert-{{mess.tags}}" role="alert">
+                    {{mess}}
+                </div>
+             {% endfor %}
+         {% endif %} 
+
+        {% block main_body %}
+        {% endblock main_body %}
+    </main>
+    <br><br>
+    <footer>
+            <div class="bottom_nav" id="bottom_nav">
+                <ul>
+                    <li><a  href="{% url 'student_home' %}" class="active"><abbr title="Home"><i class="fa fa-home" aria-hidden="true"></i></abbr></a></li>  
+
+                    <li><a href="{% url 'student_home' %}"><abbr title="Search"><i class="fa fa-search" aria-hidden="true" ></i></abbr></a></li>
+
+                    
+              
+                    <li>Username {{ request.user.username }}</li>

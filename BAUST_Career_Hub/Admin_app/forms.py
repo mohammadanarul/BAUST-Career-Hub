@@ -21,6 +21,7 @@ class StudentSignUpForm(UserCreationForm):
         department_list = []
 
     department = forms.ChoiceField(choices = department_list)
+    
 
     # department_list = []
     # try:
@@ -41,6 +42,7 @@ class StudentSignUpForm(UserCreationForm):
         level_term_list = []
    
     level_term = forms.ChoiceField(choices = level_term_list)
+    
 
     class Meta:
         
@@ -82,5 +84,4 @@ class TeacherSignUpForm(UserCreationForm):
 
   
 
-#   fields = ['username', 'email', 'first_name', 'last_name', 'password1', 'password2', 'department', 'teacher_id', 'designation', 'phone']
- 
+
