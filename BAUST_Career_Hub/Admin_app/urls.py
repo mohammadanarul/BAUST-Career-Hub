@@ -47,19 +47,19 @@ urlpatterns = [
     path('add_department', views.Add_Department, name = "add_department"),
     path('add_department_save', views.Add_Department_Save, name = "add_department_save"),
     path('manage_department', views.Manage_Department, name = "manage_department"),
-    path('edit_department/<str:department_id>', views.Edit_Department, name = "edit_department"),
+    path('edit_department/<int:id>', views.Edit_Department, name = "edit_department"),
     path('edit_department_save', views.Edit_Department_Save, name = "edit_department_save"),
     
     path('add_designation', views.Add_Designation, name = "add_designation"),
     path('add_designation_save', views.Add_Designation_Save, name = "add_designation_save"),
     path('manage_designation', views.Manage_Designation, name = "manage_designation"),
-    path('edit_designation/<str:designation_id>', views.Edit_Designation, name = "edit_designation"),
+    path('edit_designation/<int:id>', views.Edit_Designation, name = "edit_designation"),
     path('edit_designation_save', views.Edit_Designation_Save, name = "edit_designation_save"),
 
     path('add_level_term', views.Add_Level_Term, name = "add_level_term"),
     path('add_level_term_save', views.Add_Level_Term_Save, name = "add_level_term_save"),
     path('manage_level_term', views.Manage_Level_Term, name = "manage_level_term"),
-    path('edit_level_term/<str:level_term_id>', views.Edit_Level_Term, name = "edit_level_term"),
+    path('edit_level_term/<int:id>', views.Edit_Level_Term, name = "edit_level_term"),
     path('edit_level_term_save', views.Edit_Level_Term_Save, name = "edit_level_term_save"),
 
     path('add_student_from_admin', views.add_student_from_admin, name="add_student_from_admin"),

@@ -198,9 +198,9 @@ def Manage_Department(request):
 
 
 
-def Edit_Department(request, department_id):
-    deptartment = Department.objects.get(id = department_id)
-    return render(request, "Admin_app/Admin/Edit_Department.html", {"deptartment": deptartment, "id": department_id})
+def Edit_Department(request, id):
+    deptartment = Department.objects.get(id = id)
+    return render(request, "Admin_app/Admin/Edit_Department.html", {"deptartment": deptartment, "id": id})
 
 
 
