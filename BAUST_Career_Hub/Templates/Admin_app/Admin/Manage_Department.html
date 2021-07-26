@@ -41,9 +41,8 @@ Manage Department
                       <td>{{ department.id }}</td>
                       <td>{{ department.department_name }}</td>
 
-                      <td><a href="/edit_department/{{ department.id }}" class="btn btn-success">Update</a></td>
-               <!--   <td><a href="/edit_department/{{ department.id }}" class="btn btn-success">Update</a></td>
-                      <td><a href="/edit_department/{{ department.id }}" class="btn btn-danger">Delete</a></td>
+                      <td><a href="{% url 'department_update' id=department.id %}" class="btn btn-warning">Edit</a></td>
+                      <td><a href="{% url 'department_delete' id=department.id %}" class="btn btn-danger">Delete</a></td>
                         -->
 
                     </tr>

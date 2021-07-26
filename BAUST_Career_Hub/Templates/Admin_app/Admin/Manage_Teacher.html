@@ -49,13 +49,9 @@ Manage Teacher
                       <td>{{ teacher.user.phone }}</td>
                       
 
-                      <td>
-                        <button class="btn success">
-				                	<a href="{%url 'teacher_details' id=teacher.id %}">View</a>
-			                	</button>
-                        <button class="btn warning">Update</button>
-                        <button class="btn danger">Delete</button>
-                      </td>
+                      <td><a href="{% url 'teacher_details' id=teacher.id %}" class="btn btn-success">View</a></td>
+                      <td><a href="{% url 'teacher_update' id=teacher.id %}" class="btn btn-warning">Edit</a></td>
+                      <td><a href="{% url 'teacher_delete' id=teacher.id %}" class="btn btn-danger">Delete</a></td>
                       
 
                     </tr>

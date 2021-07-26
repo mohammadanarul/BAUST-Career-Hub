@@ -33,10 +33,9 @@ Manage Designation
                       <td>{{ designation.id }}</td>
                       <td>{{ designation.designation_name }}</td>
 
-                      <td><a href="/edit_designation/{{ designation.id }}" class="btn btn-success">Update</a></td>
-               <!--   <td><a href="/edit_department/{{ department.id }}" class="btn btn-success">Update</a></td>
-                      <td><a href="/edit_department/{{ department.id }}" class="btn btn-danger">Delete</a></td>
-                        -->
+                      <td><a href="{% url 'designation_update' id=designation.id %}" class="btn btn-warning">Edit</a></td>
+                      <td><a href="{% url 'designation_delete' id=designation.id %}" class="btn btn-danger">Delete</a></td>
+                      
 
                     </tr>
                     {% endfor %}

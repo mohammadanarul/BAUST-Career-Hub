@@ -1,5 +1,5 @@
 from django.contrib import auth
-from django.template import RequestContext
+from django.template import RequestContext, context
 from .models import CustomUser, Department, Designation, Level_Term, Student, Teacher
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
@@ -402,7 +402,57 @@ def student_details(request, id):
     context = {'data': data}
     return render(request, 'Admin_app/Admin/Student_details.html', context)
 
+
+def student_update(request, id):
+    return HttpResponse('student_update')
+
+
+def student_delete(request, id):
+    data = Student.objects.get(id=id)
+    data.delete()
+    return redirect('manage_student')
+
+
 def teacher_details(request, id):
     data = Teacher.objects.get(id = id)
     context = {'data': data}
     return render(request, 'Admin_app/Admin/Teacher_details.html', context)
+
+def teacher_update(request, id):
+    return HttpResponse('teacher_update')
+
+
+def teacher_delete(request, id):
+    data = Teacher.objects.get(id=id)
+    data.delete()
+    return redirect('manage_teacher')
+
+
+def department_update(request, id):
+    return HttpResponse('department_update')
+
+
+def department_delete(request, id):
+    data = Department.objects.get(id=id)
+    data.delete()
+    return redirect('manage_department')
+
+
+def designation_update(request, id):
+    return HttpResponse('designation_update')
+
+
+def designation_delete(request, id):
+    data = Designation.objects.get(id=id)
+    data.delete()
+    return redirect('manage_designation')
+
+
+def level_term_update(request, id):
+    return HttpResponse('level_term_update')
+
+
+def level_term_delete(request, id):
+    data = Level_Term.objects.get(id=id)
+    data.delete()
+    return redirect('manage_level_term')

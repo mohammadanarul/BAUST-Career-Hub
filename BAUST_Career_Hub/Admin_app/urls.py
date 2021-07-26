@@ -66,7 +66,22 @@ urlpatterns = [
     path('add_teacher_from_admin', views.add_teacher_from_admin, name="add_teacher_from_admin"),
 
     path('student_details/<int:id>/', views.student_details, name="student_details"),
+    path('student_update/<int:id>/', views.student_update, name="student_update"),
+    path('student_delete/<int:id>/', views.student_delete, name="student_delete"),
+
     path('teacher_details/<int:id>/', views.teacher_details, name="teacher_details"),
+    path('teacher_update/<int:id>/', views.teacher_update, name="teacher_update"),
+    path('teacher_delete/<int:id>/', views.teacher_delete, name="teacher_delete"),
+
+    path('department_update/<int:id>/', views.department_update, name="department_update"),
+    path('department_delete/<int:id>/', views.department_delete, name="department_delete"),
+
+    path('designation_update/<int:id>/', views.designation_update, name="designation_update"),
+    path('designation_delete/<int:id>/', views.designation_delete, name="designation_delete"),
+
+    path('level_term_update/<int:id>/', views.level_term_update, name="level_term_update"),
+    path('level_term_delete/<int:id>/', views.level_term_delete, name="level_term_delete"),
+    
 
 
 
