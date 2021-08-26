@@ -35,8 +35,9 @@ urlpatterns = [
     path('add_student', views.Add_Student, name = "add_student"),
     path('add_student_save', views.Add_Student_Save, name = "add_student_save"),
     path('manage_student', views.Manage_Student, name = "manage_student"),
-    path('edit_student', views.Edit_Student, name = "edit_student"),
-    path('edit_student_save', views.Edit_Student_Save, name = "edit_student_save"),
+    # path('edit_student', views.Edit_Student, name = "edit_student"),
+
+    # path('student_update_save', views.student_update_save, name = "student_update_save"),
 
     path('add_teacher', views.Add_Teacher, name = "add_teacher"),
     path('add_teacher_save', views.Add_Teacher_Save, name = "add_teacher_save"),
@@ -81,6 +82,8 @@ urlpatterns = [
 
     path('level_term_update/<int:id>/', views.level_term_update, name="level_term_update"),
     path('level_term_delete/<int:id>/', views.level_term_delete, name="level_term_delete"),
+
+    path('student_profile', views.student_profile, name="student_profile"),
     
 
 

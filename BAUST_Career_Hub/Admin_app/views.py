@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import messages
 from django.urls import reverse
-from .forms import  StudentSignUpForm, TeacherSignUpForm
+from .forms import  StudenUpdateForm, StudentSignUpForm, TeacherSignUpForm
 from django.contrib.auth import login, authenticate, logout
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import render, redirect, get_object_or_404
@@ -119,7 +119,11 @@ def user_signin(request):
                 
                 login(request,user)
                 if user.is_student:
+                    # data = Student.objects.get()
+                    # context = {'data': data}
                     return redirect('student_home')
+                    
+                    # return render(request, 'Admin_app/Student/StudentHome.html', context)
                 elif user.is_teacher:
                     return redirect('teacher_home')
                 elif user.is_superuser:
@@ -137,13 +141,16 @@ def user_signin(request):
 
 def user_logout(request):
     logout(request)
-    return HttpResponseRedirect("/")
+    return HttpResponseRedirect("signin")
 
 
 
 @login_required  
 def student_home(request):
     if request.user.is_student:
+        # data = Student.objects.get(id = id)
+        # context = {'data': data}
+        # return render(request, 'Admin_app/Student/StudentHome.html', context)
         return render(request, 'Admin_app/Student/StudentHome.html')
     else:
         return HttpResponse('You are not as Student!')
@@ -242,13 +249,9 @@ def Manage_Student(request):
 
 
 
-def Edit_Student(request):
-    return HttpResponse('Edit Student')
+# def Edit_Student(request):
+#     return HttpResponse('Edit Student')
 
-
-
-def Edit_Student_Save(request):
-    return HttpResponse('Edit Student Save')
 
 
 
@@ -404,7 +407,69 @@ def student_details(request, id):
 
 
 def student_update(request, id):
-    return HttpResponse('student_update')
+    data = Student.objects.get(id = id)
+    form = StudentSignUpForm(request.POST or None, instance = data)
+    if form.is_valid():
+        form = form.save(commit=False)
+        form.save()
+        return redirect('manage_student')
+    
+    context = {'form': form}
+    return render(request, 'Admin_app/Admin/Student_Update.html', context )
+
+
+# def student_update_save(request):
+#     print("1")
+#     if request.method == 'POST':
+#         print("2")
+#         form = StudentSignUpForm(request.POST)
+#         print("3")
+#         if form.is_valid():
+#             print("7")
+#             first_name = form.cleaned_data["first_name"]
+#             print("8")
+#             last_name = form.cleaned_data["last_name"]
+#             username = form.cleaned_data["username"]
+#             email = form.cleaned_data["email"]
+            
+#             department = form.cleaned_data["department"]
+#             student_id = form.cleaned_data["student_id"]
+#             level_term = form.cleaned_data["level_term"]
+#             phone = form.cleaned_data["phone"]
+
+
+#             try:
+#                 print("9")
+#                 user = CustomUser.objects.get(id=student_id)
+#                 print("10")
+#                 user.username = username
+#                 user.email = email
+#                 user.first_name = first_name
+#                 user.last_name = last_name
+#                 username.department = department
+#                 user.student_id = student_id
+#                 user.level_term = level_term
+#                 user.phone = phone
+               
+#                 print("11")
+#                 user.save()
+
+
+#                 messages.success(request, "Successfully Edited  Student")
+#                 print("12")
+#                 return HttpResponseRedirect(reverse("manage_student", kwargs={"student_id":student_id}))
+
+
+#             except:
+#                 print("13")
+#                 messages.error(request, "Failed to Edit Student")
+#                 return HttpResponseRedirect(reverse("student_update", kwargs={"student_id":student_id}))
+
+#         else:
+#             print("14")
+#             form = StudentSignUpForm(request.POST)
+#             return render(request, 'Admin_app/Admin/Student_Update.html',
+#                   {"form": form})
 
 
 def student_delete(request, id):
@@ -456,3 +521,6 @@ def level_term_delete(request, id):
     data = Level_Term.objects.get(id=id)
     data.delete()
     return redirect('manage_level_term')
+
+def student_profile(request):
+    return render(request,'Admin_app/Student/student_profile.html')
