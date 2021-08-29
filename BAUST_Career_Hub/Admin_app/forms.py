@@ -10,98 +10,25 @@ from . models import  CustomUser, Department, Designation, Level_Term, Student, 
 
 
 
-class StudentSignUpForm(UserCreationForm):
-    department_list = []
-    try:
-        department = Department.objects.all()
-        for dept in department:
-            small_dept = (dept.id, dept.department_name)
-            department_list.append(small_dept)
-    except:
-        department_list = []
-
-    department = forms.ChoiceField(choices = department_list)
-    
-
-    level_term_list = []
-    try:
-        level_term = Level_Term.objects.all()
-        for lt in level_term:
-            small_lt = (lt.id, lt.level_term_name)
-            level_term_list.append(small_lt)
-    except:
-        level_term_list = []
-   
-    level_term = forms.ChoiceField(choices = level_term_list)
-    
+class UserCreateForm(UserCreationForm): 
 
     class Meta:
-        
         model = CustomUser
-        fields = ['username', 'email', 'first_name', 'last_name', 'password1','password2', 'department', 'student_id', 'level_term', 'phone']
+        fields = ['username', 'email', 'first_name', 'last_name', 'password1','password2', 'department', 'phone']
 
 #  fields = ['username', 'email', 'first_name', 'last_name', 'password1', 'password2', 'department', 'student_id', 'level_term', 'phone']
 
-    
-
-
-class TeacherSignUpForm(UserCreationForm):
-    department_list = []
-    try:
-        department = Department.objects.all()
-        for dept in department:
-            small_dept = (dept.id, dept.department_name)
-            department_list.append(small_dept)
-    except:
-        department_list = []
-
-    department = forms.ChoiceField(choices=department_list)
-    
-    designation_list = []
-    try:
-        designation = Designation.objects.all()
-        for des in designation:
-            small_des = (des.id, des.designation_name)
-            designation_list.append(small_des)
-    except:
-        designation_list = []
-
-    designation = forms.ChoiceField(choices = designation_list)
-    
-
+class StudentAddForm(forms.ModelForm):
     class Meta:
-        model = CustomUser
-        fields = ['username', 'email', 'first_name', 'last_name', 'password1', 'password2', 'department', 'teacher_id', 'designation', 'phone']
+        model = Student
+        exclude = ['user']
+
+
+class TeacherAddForm(forms.ModelForm):
+    class  Meta:
+        model = Teacher
+        exclude = ['user']
 
   
 
 
-class StudenUpdateForm(UserCreationForm):
-    department_list = []
-    try:
-        department = Department.objects.all()
-        for dept in department:
-            small_dept = (dept.id, dept.department_name)
-            department_list.append(small_dept)
-    except:
-        department_list = []
-
-    department = forms.ChoiceField(choices = department_list)
-    
-
-    level_term_list = []
-    try:
-        level_term = Level_Term.objects.all()
-        for lt in level_term:
-            small_lt = (lt.id, lt.level_term_name)
-            level_term_list.append(small_lt)
-    except:
-        level_term_list = []
-   
-    level_term = forms.ChoiceField(choices = level_term_list)
-    
-
-    class Meta:
-        
-        model = CustomUser
-        fields = ['username', 'email', 'first_name', 'last_name', 'password1','password2', 'department', 'student_id', 'level_term', 'phone']

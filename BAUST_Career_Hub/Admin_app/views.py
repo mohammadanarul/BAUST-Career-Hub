@@ -1,11 +1,11 @@
 from django.contrib import auth
 from django.template import RequestContext, context
-from .models import CustomUser, Department, Designation, Level_Term, Student, Teacher
+from .models import CustomUser, Department, Designation, Level_Term, Post, Student, Teacher
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, response
 from django.contrib import messages
 from django.urls import reverse
-from .forms import  StudenUpdateForm, StudentSignUpForm, TeacherSignUpForm
+from .forms import   UserCreateForm,StudentAddForm, TeacherAddForm
 from django.contrib.auth import login, authenticate, logout
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import render, redirect, get_object_or_404
@@ -31,66 +31,63 @@ def footer(request):
 def signin(request):
     # form = AuthenticationForm()
     return render(request, 'Admin_app/Login.html')
-    
-
-
-def signup(request):
-    return render(request, 'Admin_app/SignUp.html')
 
 
 
 def student_signup(request):
-    form = StudentSignUpForm()
-    return render(request, 'Admin_app/StudentSignUp.html', {"form": form}) 
-
+    user_form = UserCreateForm()
+    student_form = StudentAddForm()
+    return render(request, 'Admin_app/StudentSignUp.html', {"user_form": user_form, "student_form": student_form}) 
 
 
 def teacher_signup(request):
-    form = TeacherSignUpForm()
-    return render(request, 'Admin_app/TeacherSignUp.html', {"form": form})
+    user_form = UserCreateForm()
+    teacher_form = TeacherAddForm()
+    return render(request, 'Admin_app/TeacherSignUp.html', {"user_form": user_form, "teacher_form": teacher_form})
 
 
 
 def student_signup_save(request):
-    form = StudentSignUpForm()
-    print(form.errors)
-    if request.method == 'POST':
-        print(form.errors)
-        form = StudentSignUpForm(request.POST, request.FILES)
-        print(form.errors)
-        
-        if form.is_valid():
-            print(form.errors)
-            instance = form.save(commit = False)
-            print(form.errors)
-            instance.is_student = True
-            print(form.errors)
-            instance.save()
-            print(form.errors)
-            
-            return redirect('signin')
+    user_form = UserCreateForm()
+    student_form = StudentAddForm()
 
-    form = StudentSignUpForm()
-    print(form.errors)
-    return render(request, 'Admin_app/StudentSignUp.html', {'form': form})
+    if request.method == 'POST':
+        user_form = UserCreateForm(request.POST)
+        student_form = StudentAddForm(request.POST)
+        
+        if user_form.is_valid() and student_form.is_valid():
+            user_obj = user_form.save()
+            student_obj = student_form.save(commit = False)
+            student_obj.user = user_obj
+            student_obj.save()
+            return redirect('signin')
+        else:
+            return render(request, 'Admin_app/StudentSignUp.html', {'user_form': user_form,'student_form':student_form})
+        
+        
+    return render(request, 'Admin_app/StudentSignUp.html', {'user_form': user_form,'student_form':student_form})
     
 
 
 def teacher_signup_save(request):
-    form = TeacherSignUpForm()
+    user_form = UserCreateForm()
+    teacher_form = TeacherAddForm()
 
     if request.method == 'POST':
-        form = TeacherSignUpForm(request.POST)
+        user_form = UserCreateForm(request.POST)
+        teacher_form = TeacherAddForm(request.POST)
         
-        if form.is_valid():
-            instance = form.save(commit = False)
-            instance.is_teacher = True
-            instance.save()
-            
+        if user_form.is_valid() and teacher_form.is_valid():
+            user_obj = user_form.save()
+            teacher_obj = teacher_form.save(commit = False)
+            teacher_obj.user = user_obj
+            teacher_obj.save()
             return redirect('signin')
-
-    form = TeacherSignUpForm()
-    return render(request, 'Admin_app/TeacherSignup.html', {'form': form})
+        else:
+            return render(request, 'Admin_app/TeacherSignUp.html', {'user_form': user_form,'teacher_form':teacher_form})
+        
+        
+    return render(request, 'Admin_app/TeacherSignUp.html', {'user_form': user_form,'teacher_form':teacher_form})
                
 
 
@@ -116,20 +113,13 @@ def user_signin(request):
             if user.is_active == False:
                 inactivity = 'This account is not active'
             else:
-                
                 login(request,user)
                 if user.is_student:
-                    # data = Student.objects.get()
-                    # context = {'data': data}
                     return redirect('student_home')
-                    
-                    # return render(request, 'Admin_app/Student/StudentHome.html', context)
                 elif user.is_teacher:
                     return redirect('teacher_home')
                 elif user.is_superuser:
                     return redirect('admin_home')
-
-
 
     context = {
         'username_err': username_err,
@@ -137,6 +127,7 @@ def user_signin(request):
         'inactive': inactivity,
     }
     return render(request, "Admin_app/Login.html", context)
+
 
 
 def user_logout(request):
@@ -148,10 +139,12 @@ def user_logout(request):
 @login_required  
 def student_home(request):
     if request.user.is_student:
-        # data = Student.objects.get(id = id)
-        # context = {'data': data}
-        # return render(request, 'Admin_app/Student/StudentHome.html', context)
-        return render(request, 'Admin_app/Student/StudentHome.html')
+        data = Student.objects.get()
+        posts = Post.objects.get()
+
+        
+        return render(request, 'Admin_app/Student/StudentHome.html', {'data': data, 'posts': posts})
+        # return render(request, 'Admin_app/Student/StudentHome.html')
     else:
         return HttpResponse('You are not as Student!')
 
@@ -205,36 +198,9 @@ def Manage_Department(request):
 
 
 
-def Edit_Department(request, id):
-    deptartment = Department.objects.get(id = id)
-    return render(request, "Admin_app/Admin/Edit_Department.html", {"deptartment": deptartment, "id": id})
-
-
-
-def Edit_Department_Save(request):
-    if request.method == "POST":
-        department_id = request.POST.get("department_id")
-        department_name = request.POST.get("department_name")
-
-        try:
-            department = Department.objects.get(id=department_id)
-            department.department_name = department_name
-            department.save()
-
-            messages.success(request, "Successfully Update Department")
-            return HttpResponseRedirect(reverse("manage_department", kwargs={"department_id":department_id}))
-
-        except:
-            messages.error(request, "Failed to Update Department")
-            return HttpResponseRedirect(reverse("edit_department", kwargs={"department_id":department_id}))
-    else:
-        return HttpResponse("<h2>Method not allowed</h2>")
-
-
-
-def Add_Student(request):
-    form = StudentSignUpForm()
-    return render(request, 'Admin_app/Admin/Add_Student.html', {'form': form})
+# def Add_Student(request):
+#     # form = StudentSignUpForm()
+#     # return render(request, 'Admin_app/Admin/Add_Student.html', {'form': form})
 
 
 
@@ -247,22 +213,6 @@ def Manage_Student(request):
     student = Student.objects.all()
     return render(request, "Admin_app/Admin/Manage_Student.html", {"student": student})
 
-
-
-# def Edit_Student(request):
-#     return HttpResponse('Edit Student')
-
-
-
-
-def Add_Teacher(request):
-    form = TeacherSignUpForm()
-    return render(request, 'Admin_app/Admin/Add_Teacher.html', {'form': form})
-
-
-
-def Add_Teacher_Save(request):
-    return HttpResponse('Add Teacher Save')
 
 
 
@@ -358,46 +308,50 @@ def Edit_Level_Term_Save(request):
     return HttpResponse('Edit Student Save')
 
 
-
-
-
-
-
-
-
-
 def add_student_from_admin(request):
-    form = StudentSignUpForm()
+    user_form = UserCreateForm()
+    student_form = StudentAddForm()
 
     if request.method == 'POST':
-        form = StudentSignUpForm(request.POST)
+        user_form = UserCreateForm(request.POST)
+        student_form = StudentAddForm(request.POST)
         
-        if form.is_valid():
-            instance = form.save(commit = False)
-            instance.is_student = True
-            instance.save()
-            
+        if user_form.is_valid() and student_form.is_valid():
+            user_obj = user_form.save()
+            student_obj = student_form.save(commit = False)
+            student_obj.user = user_obj
+            student_obj.save()
             return redirect('manage_student')
+        else:
+            return render(request, 'Admin_app/Admin/Add_Student.html', {'user_form': user_form,'student_form':student_form})
+        
+        
+    return render(request, 'Admin_app/Admin/Add_Student.html', {'user_form': user_form,'student_form':student_form})
+            
+            
 
-    form = StudentSignUpForm()
-    return render(request, 'Admin_app/Admin/Add_Student.html', {'form': form})
+    
 
 
 def add_teacher_from_admin(request):
-    form = TeacherSignUpForm()
+    user_form = UserCreateForm()
+    teacher_form = TeacherAddForm()
 
     if request.method == 'POST':
-        form = TeacherSignUpForm(request.POST)
+        user_form = UserCreateForm(request.POST)
+        teacher_form = TeacherAddForm(request.POST)
         
-        if form.is_valid():
-            instance = form.save(commit = False)
-            instance.is_teacher = True
-            instance.save()
-            
+        if user_form.is_valid() and teacher_form.is_valid():
+            user_obj = user_form.save()
+            teacher_obj = teacher_form.save(commit = False)
+            teacher_obj.user = user_obj
+            teacher_obj.save()
             return redirect('manage_teacher')
-
-    form = TeacherSignUpForm()
-    return render(request, 'Admin_app/Admin/Add_Teacher.html', {'form': form})
+        else:
+            return render(request, 'Admin_app/Admin/Add_Teacher.html', {'user_form': user_form,'teacher_form':teacher_form})
+        
+        
+    return render(request, 'Admin_app/Admin/Add_Teacher.html', {'user_form': user_form,'teacher_form':teacher_form})
 
 
 def student_details(request, id):
@@ -407,69 +361,30 @@ def student_details(request, id):
 
 
 def student_update(request, id):
-    data = Student.objects.get(id = id)
-    form = StudentSignUpForm(request.POST or None, instance = data)
-    if form.is_valid():
-        form = form.save(commit=False)
-        form.save()
-        return redirect('manage_student')
+    user_form = UserCreateForm()
+    student_form = StudentAddForm()
+    student = Student.objects.get(id = id)
+    return render(request, 'Admin_app/Admin/Update_student.html', {'user_form':user_form, 'student_form':student_form, 'student':student})
+
+def student_update_save(request):
+    pass
+    # user = CustomUser.objects.get(id=id)
+    # student = Student.objects.get(id = id)
+    # user_form = UserCreateForm(request.POST or None, instance = user.user)
+    # student_form = StudentAddForm(request.POST or None, instance = student.user)
     
-    context = {'form': form}
-    return render(request, 'Admin_app/Admin/Student_Update.html', context )
-
-
-# def student_update_save(request):
-#     print("1")
-#     if request.method == 'POST':
-#         print("2")
-#         form = StudentSignUpForm(request.POST)
-#         print("3")
-#         if form.is_valid():
-#             print("7")
-#             first_name = form.cleaned_data["first_name"]
-#             print("8")
-#             last_name = form.cleaned_data["last_name"]
-#             username = form.cleaned_data["username"]
-#             email = form.cleaned_data["email"]
-            
-#             department = form.cleaned_data["department"]
-#             student_id = form.cleaned_data["student_id"]
-#             level_term = form.cleaned_data["level_term"]
-#             phone = form.cleaned_data["phone"]
-
-
-#             try:
-#                 print("9")
-#                 user = CustomUser.objects.get(id=student_id)
-#                 print("10")
-#                 user.username = username
-#                 user.email = email
-#                 user.first_name = first_name
-#                 user.last_name = last_name
-#                 username.department = department
-#                 user.student_id = student_id
-#                 user.level_term = level_term
-#                 user.phone = phone
-               
-#                 print("11")
-#                 user.save()
-
-
-#                 messages.success(request, "Successfully Edited  Student")
-#                 print("12")
-#                 return HttpResponseRedirect(reverse("manage_student", kwargs={"student_id":student_id}))
-
-
-#             except:
-#                 print("13")
-#                 messages.error(request, "Failed to Edit Student")
-#                 return HttpResponseRedirect(reverse("student_update", kwargs={"student_id":student_id}))
-
-#         else:
-#             print("14")
-#             form = StudentSignUpForm(request.POST)
-#             return render(request, 'Admin_app/Admin/Student_Update.html',
-#                   {"form": form})
+    # if user_form.is_valid() and student_form.is_valid():
+    #     # form = form.save(commit=False)
+    #     # form.save()
+    #     user_obj = user_form.save()
+    #     student_obj = student_form.save(commit = False)
+    #     student_obj.user = user_obj
+    #     student_obj.save()
+    #     return redirect('manage_student')
+        
+    # else:
+    #     return render(request, 'Admin_app/Admin/Add_Student.html', {'user_form': user_form,'student_form':student_form})
+        
 
 
 def student_delete(request, id):
@@ -484,7 +399,13 @@ def teacher_details(request, id):
     return render(request, 'Admin_app/Admin/Teacher_details.html', context)
 
 def teacher_update(request, id):
-    return HttpResponse('teacher_update')
+    user_form = UserCreateForm()
+    teacher_form = TeacherAddForm()
+    teacher = Teacher.objects.get(id = id)
+    return render(request, 'Admin_app/Admin/Update_Teacher.html', {'user_form':user_form, 'teacher_form':teacher_form, 'teacher':teacher})
+
+def teacher_update_save():
+    pass
 
 
 def teacher_delete(request, id):
@@ -494,7 +415,17 @@ def teacher_delete(request, id):
 
 
 def department_update(request, id):
-    return HttpResponse('department_update')
+    # return HttpResponse('department_update')
+    # dept = Department.objects.get()
+    
+    return render(request, 'Admin_app/Admin/Update_Department.html')
+    
+
+def update_department_save(request):
+    pass
+    
+
+    
 
 
 def department_delete(request, id):
@@ -504,7 +435,10 @@ def department_delete(request, id):
 
 
 def designation_update(request, id):
-    return HttpResponse('designation_update')
+    return render(request, 'Admin_app/Admin/Update_Designation.html')
+
+def update_designation_save(request):
+    pass
 
 
 def designation_delete(request, id):
@@ -514,7 +448,11 @@ def designation_delete(request, id):
 
 
 def level_term_update(request, id):
-    return HttpResponse('level_term_update')
+    return render(request, 'Admin_app/Admin/Update_Level_Term.html')
+    # return HttpResponse('level_term_update')
+
+def update_level_term_save(request):
+    pass
 
 
 def level_term_delete(request, id):
@@ -523,4 +461,21 @@ def level_term_delete(request, id):
     return redirect('manage_level_term')
 
 def student_profile(request):
-    return render(request,'Admin_app/Student/student_profile.html')
+    data = Student.objects.get()
+    return render(request,'Admin_app/Student/student_profile.html', {'data': data})
+
+def student_post(request):
+    if request.method == "POST":
+        post = request.POST.get("post")
+
+        try:
+            post_model = Post(post=post)
+            post_model.save()
+            messages.success(request, "Successfully Added Department")
+            return HttpResponseRedirect(reverse("student_home"))
+        except:
+            messages.error(request, "Failed to Add Department")
+            return HttpResponseRedirect(reverse("student_home"))
+    
+    else:
+        return HttpResponse("Method not allowed")

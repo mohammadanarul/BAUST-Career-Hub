@@ -26,8 +26,8 @@
 
 
           <li class="nav-item">
-            {% url 'add_student' as add_student %}
-            <a href="{% url 'add_student' %}" class="nav-link {% if request.path == add_student %} active {% endif %}">
+            {% url 'add_student_from_admin' as add_student_from_admin %}
+            <a href="{% url 'add_student_from_admin' %}" class="nav-link {% if request.path == add_student_from_admin %} active {% endif %}">
               <i class="nav-icon fas fa-th"></i>
               <p>
                 Add Student
@@ -47,8 +47,8 @@
           </li>
 
           <li class="nav-item">
-            {% url 'add_teacher' as add_teacher %}
-            <a href="{% url 'add_teacher' %}" class="nav-link {% if request.path == add_teacher %} active {% endif %}">
+            {% url 'add_teacher_from_admin' as add_teacher_from_admin %}
+            <a href="{% url 'add_teacher_from_admin' %}" class="nav-link {% if request.path == add_teacher_from_admin %} active {% endif %}">
               <i class="nav-icon fas fa-th"></i>
               <p>
                 Add Teacher

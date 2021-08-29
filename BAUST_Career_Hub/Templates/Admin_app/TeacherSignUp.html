@@ -23,7 +23,17 @@
                 <div class="card-body">
                     <form action="{% url 'teacher_signup_save' %}" method="POST">
                       {% csrf_token %}
-                         {% for field in form.visible_fields %}
+                         {% for field in user_form.visible_fields %}
+                           <div class="form-group">
+                               {{ field.label_tag }}
+                                  {% render_field field class="form-control" %}
+                                    {% for error in field.errors %}
+                                      <span style="color:red">{{ error }}</span>
+                                    {% endfor %}
+                         {% endfor %}<br>
+
+
+                         {% for field in teacher_form.visible_fields %}
                            <div class="form-group">
                                {{ field.label_tag }}
                                   {% render_field field class="form-control" %}

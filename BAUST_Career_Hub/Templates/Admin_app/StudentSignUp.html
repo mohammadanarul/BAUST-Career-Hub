@@ -23,10 +23,20 @@
                 <div class="card-body">
                     <form action="{% url 'student_signup_save' %}" method="POST">
                       {% csrf_token %}
-                         {% for field in form.visible_fields %}
+                         {% for field in user_form.visible_fields %}
                            <div class="form-group">
                                {{ field.label_tag }}
-                               {% render_field field class="form-control" %}
+                                  {% render_field field class="form-control" %}
+                                    {% for error in field.errors %}
+                                      <span style="color:red">{{ error }}</span>
+                                    {% endfor %}
+                         {% endfor %}<br>
+
+
+                         {% for field in student_form.visible_fields %}
+                           <div class="form-group">
+                               {{ field.label_tag }}
+                                  {% render_field field class="form-control" %}
                                     {% for error in field.errors %}
                                       <span style="color:red">{{ error }}</span>
                                     {% endfor %}
@@ -34,7 +44,7 @@
                              <input type="submit" value="Register" class="btn btn-block btn-primary">
                            </div>
                     </form>
-                    <span>Already on BAUST Career-Hub as Teacher? 
+                    <span>Already on BAUST Career-Hub as Student? 
         <a href="{% url 'signin' %}" class="btn-get-started scrollto d-inline-flex align-items-center justify-content-center align-self-center">
         <span>Sign In </span>
       </a>
